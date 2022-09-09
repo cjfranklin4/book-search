@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import ResultContainer from "./ResultContainer";
+import {Button,Heading,Input,FormControl, IconButton,useColorMode,useColorModeValue,Box } from '@chakra-ui/react'
+import { SearchIcon } from '@chakra-ui/icons'
 
 function App() {
   const [bookSearch, setBookSearch] = useState('');
@@ -39,16 +41,28 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <Box className="App">
       <header className="App-header">
-        <h1>Book Search</h1>
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Search" required value={bookSearch} onChange={(e) => setBookSearch(e.target.value)}/>
-          <input type="submit" value="Submit" />
-        </form>
+        <Heading as="h1">Book Search</Heading>
+        <FormControl 
+        as='form' 
+        onSubmit={handleSubmit}
+        >
+          <Input type="text" placeholder="Search" required value={bookSearch} onChange={(e) => setBookSearch(e.target.value)} w='90%' maxW='800px'/>
+
+          <IconButton
+            icon={<SearchIcon />} 
+            aria-label='Search for Book' 
+            type="submit" 
+            value="Submit"
+            w='10%'
+            maxW='200px'
+          />
+
+        </FormControl>
       </header>
-      {resultsContainer && <ResultContainer results={resultsV}/>}
-    </div>
+      {resultsContainer && <ResultContainer results={resultsV} bookSearch={bookSearch} />}
+    </Box>
   );
 }
 
