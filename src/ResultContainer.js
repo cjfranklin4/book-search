@@ -3,10 +3,12 @@ import {Grid, GridItem, Text, Button,Heading, Image,Flex,useColorMode,useColorMo
 const ResultContainer = ({results, bookSearch}) => {
    return (
     <Box>
-        <Heading as="h2">Results for: {bookSearch}</Heading>
+        <Heading as="h2" textAlign='center' mb={2}>Results for: {bookSearch}</Heading>
         <Grid
         templateColumns='repeat(2, 1fr)'
         gap={5}
+        w="95%"
+        m='0 auto'
         >
              {results.map((book, index) => (
                 <GridItem 

@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import ResultContainer from "./ResultContainer";
-import {Button,Heading,Input,FormControl, IconButton,useColorMode,useColorModeValue,Box } from '@chakra-ui/react'
+import {Button,Heading,Input,FormControl, IconButton,useColorMode,useColorModeValue,Icon,Box, Spinner } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
+import { BsGithub } from 'react-icons/bs'
 
 function App() {
   const [bookSearch, setBookSearch] = useState('');
   const [resultsContainer, setResultsContainer] = useState(false);
   const [resultsV, setResultsV] = useState([]);
+  const [isPending, setIsPending] = useState(false);
   const [callApi, setCallApi] = useState([]);
 
   const getBooks = useCallback(bookSearch => {
@@ -20,6 +22,7 @@ function App() {
           setResultsV(data.items);
     
           //set the results container to be true
+          setIsPending(false)
           setResultsContainer(true);
         })
         .catch((err) => {
@@ -35,6 +38,7 @@ function App() {
 
     //set the state to call the API to true
     setCallApi(true);
+    setIsPending(true);
 
     //call API
     getBooks(bookSearch);
@@ -43,10 +47,13 @@ function App() {
   return (
     <Box className="App">
       <header className="App-header">
-        <Heading as="h1">Book Search</Heading>
+        <Heading as="h1" textAlign='center' mt={5} mb={2}>Book Search</Heading>
         <FormControl 
-        as='form' 
+        as='form'
+        display='flex' 
         onSubmit={handleSubmit}
+        justifyContent='center'
+        mb={5}
         >
           <Input type="text" placeholder="Search" required value={bookSearch} onChange={(e) => setBookSearch(e.target.value)} w='90%' maxW='800px'/>
 
@@ -61,7 +68,27 @@ function App() {
 
         </FormControl>
       </header>
+
+      {isPending && 
+        <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
+          <Heading as="h2" textAlign='center'>Finding your books</Heading>
+          <Spinner 
+          size='xl'
+          color='teal.400'
+          />
+        </Box>}
+
       {resultsContainer && <ResultContainer results={resultsV} bookSearch={bookSearch} />}
+
+      <Box as='footer' display='flex' justifyContent='center' h='50px' background='green.400' mt={5}>
+        This is a footer.
+
+        <Box as='a' href='https://github.com/cjfranklin4/ffxiv-bingo'>
+        <Icon as={BsGithub} color='teal'  _hover={{
+          color: "teal.300",
+          }}/>
+      </Box>
+      </Box>
     </Box>
   );
 }
