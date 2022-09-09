@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ResultContainer from "./ResultContainer";
 
 function App() {
@@ -7,7 +7,23 @@ function App() {
   const [resultsV, setResultsV] = useState([]);
   const [callApi, setCallApi] = useState([]);
 
-  const firstUpdate = useRef(true);
+  const getBooks = useCallback(bookSearch => {
+    //const book = {bookSearch};
+    console.log(bookSearch);
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=${bookSearch}&maxResults=6`)
+        .then(res => res.json())
+        .then((data) =>{
+          //console.log(data.items, 'api results');
+    
+          setResultsV(data.items);
+    
+          //set the results container to be true
+          setResultsContainer(true);
+        })
+        .catch((err) => {
+          console.log(err.message, 'error message');
+        })
+  }, [bookSearch])
 
   const handleSubmit = (e) =>{
 
@@ -17,39 +33,10 @@ function App() {
 
     //set the state to call the API to true
     setCallApi(true);
+
+    //call API
+    getBooks(bookSearch);
   }
-
-  useEffect(() => {
-    if(firstUpdate.current){
-      fetch('https://www.googleapis.com/books/v1/volumes?q=quilting&maxResults=6')
-    .then(res => res.json())
-    .then((data) =>{
-      console.log(data.items, 'api results');
-
-      setResultsV(data.items);
-
-      //set the results container to be true
-      setResultsContainer(true);
-    })
-    .then(() =>{
-      //console.log(resultsV, 'results');
-
-      //set new array
-      /* let newResults = resultsV.map(book => book.volumeInfo);
-      setResultsV(newResults);
-      console.log(newResults); */
-    })
-    .catch((err) => {
-      console.log(err.message);
-    })
-  }
-  }, [callApi]);
-
-  useEffect(() => {
-    let newResults = resultsV.map(book => book.volumeInfo);
-      setResultsV(newResults);
-      console.log(newResults, 'new results');
-  },[])
 
   return (
     <div className="App">
@@ -60,7 +47,6 @@ function App() {
           <input type="submit" value="Submit" />
         </form>
       </header>
-      {/* console.log(resultsV, 'results') */}
       {resultsContainer && <ResultContainer results={resultsV}/>}
     </div>
   );
