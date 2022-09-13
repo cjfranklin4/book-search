@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import ResultContainer from "./ResultContainer";
-import {Button,Heading,Input,FormControl, IconButton,useColorMode,useColorModeValue,Icon,Box, Spinner } from '@chakra-ui/react'
-import { SearchIcon } from '@chakra-ui/icons'
-import { BsGithub } from 'react-icons/bs'
+import Placeholder from "./Placeholder";
+import {Flex,Heading,Input,FormControl, IconButton,useColorMode,Icon,Box, Spinner } from '@chakra-ui/react'
+import { SearchIcon, SunIcon, MoonIcon } from '@chakra-ui/icons'
+import { BsGithub, BsBookmarksFill } from 'react-icons/bs'
 
 function App() {
   const [bookSearch, setBookSearch] = useState('');
   const [resultsContainer, setResultsContainer] = useState(false);
   const [resultsV, setResultsV] = useState([]);
   const [isPending, setIsPending] = useState(false);
-  const [callApi, setCallApi] = useState([]);
+  const [placeHome, setplaceHome] = useState(true);
 
   const getBooks = useCallback(bookSearch => {
     //const book = {bookSearch};
@@ -17,7 +18,7 @@ function App() {
     fetch(`https://www.googleapis.com/books/v1/volumes?q=${bookSearch}&maxResults=6`)
         .then(res => res.json())
         .then((data) =>{
-          //console.log(data.items, 'api results');
+          console.log(data.items, 'api results');
     
           setResultsV(data.items);
     
@@ -37,17 +38,35 @@ function App() {
     //console.log(e);
 
     //set the state to call the API to true
-    setCallApi(true);
+    setplaceHome(false);
     setIsPending(true);
 
     //call API
     getBooks(bookSearch);
   }
 
+  //Chakra UI things
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
-    <Box className="App">
-      <header className="App-header">
-        <Heading as="h1" textAlign='center' mt={5} mb={2}>Book Search</Heading>
+    <Box>
+      <Box as="header">
+        <Flex as="a" href="/" justifyContent='center' alignItems='center'>
+          <Heading as="h1" textAlign='center' mt={5} mb={2}>Bookmarked</Heading>
+
+          <Icon 
+          as={BsBookmarksFill} 
+          color='orange.300'/>
+
+          <IconButton 
+            onClick={toggleColorMode}
+            colorScheme='blue'
+            variant='outline' 
+            icon={colorMode === 'light' ? <MoonIcon />  : <SunIcon />}
+          >
+          </IconButton>
+        </Flex>
+        
         <FormControl 
         as='form'
         display='flex' 
@@ -64,28 +83,38 @@ function App() {
             value="Submit"
             w='10%'
             maxW='200px'
+            backgroundColor='orange.300'
+            _hover={{
+              backgroundColor: "orange.500",
+              }}
+            color='white'
           />
 
         </FormControl>
-      </header>
+      </Box>
+
+      {placeHome && <Placeholder/>}
 
       {isPending && 
         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
           <Heading as="h2" textAlign='center'>Finding your books</Heading>
           <Spinner 
           size='xl'
-          color='teal.400'
+          color='orange.400'
           />
         </Box>}
 
       {resultsContainer && <ResultContainer results={resultsV} bookSearch={bookSearch} />}
 
-      <Box as='footer' display='flex' justifyContent='center' h='50px' background='green.400' mt={5}>
-        This is a footer.
+      <Box as='footer' display='flex' alignItems='center' flexDirection='column' justifyContent='center' py={5} background='orange.300' mt={5} bottom='0px'>
+        <Heading as="h5" size='md'>Bookmarked</Heading>
 
-        <Box as='a' href='https://github.com/cjfranklin4/ffxiv-bingo'>
-        <Icon as={BsGithub} color='teal'  _hover={{
-          color: "teal.300",
+        <Box as='a' href='https://github.com/cjfranklin4/book-search' target="_blank">
+        <Icon 
+        as={BsGithub} 
+        color='blue.400'  
+        _hover={{
+          color: "white",
           }}/>
       </Box>
       </Box>

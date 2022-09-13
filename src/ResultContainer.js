@@ -1,4 +1,4 @@
-import {Grid, GridItem, Text, Button,Heading, Image,Flex,useColorMode,useColorModeValue,Box } from '@chakra-ui/react'
+import {Grid, GridItem, Text, Button,Heading, Image,Flex, Box } from '@chakra-ui/react'
 
 const ResultContainer = ({results, bookSearch}) => {
    return (
@@ -9,18 +9,22 @@ const ResultContainer = ({results, bookSearch}) => {
         gap={5}
         w="95%"
         m='0 auto'
+        maxW='1700px'
         >
              {results.map((book, index) => (
                 <GridItem 
                     key={index}
                     colSpan={1}
                     borderWidth='2px'
-                    borderColor='teal' 
+                    borderColor='orange.200'
+                    borderRadius='10px'
+                    overflow='hidden'
                 >
                     <Flex>
                         <Box
                             w='30%'
                             h='auto'
+                            mr='10px'
                         >
                             <Image
                                 w='100%' 
@@ -33,12 +37,20 @@ const ResultContainer = ({results, bookSearch}) => {
                             w='70%'
                             h='auto'
                         >
-                            <Heading as="h5">{book.volumeInfo.title}</Heading>
-                            <Text
+                            <Heading as="h2" size="md" mb={2}>{book.volumeInfo.title}</Heading>
+                            <Text mb={1}>{book.volumeInfo.authors} * {book.volumeInfo.publishedDate}</Text>
 
-                            >{book.volumeInfo.description}</Text>
+                            <Text mb={2}>{book.searchInfo.textSnippet}</Text>
 
-                            <Button as='a' href={book.volumeInfo.infoLink} target="_blank" rel="noreferrer">Read More</Button>
+                            <Text mb={2}>Publisher: {book.volumeInfo.publisher}</Text>
+
+                            <Button as='a' href={book.volumeInfo.infoLink} target="_blank" rel="noreferrer" backgroundColor='orange.300' 
+                            _hover={{
+                            backgroundColor: "orange.500",
+                            color:'white'
+                            }}>
+                                More Info
+                            </Button>
                         </Box>
 
                     </Flex>
