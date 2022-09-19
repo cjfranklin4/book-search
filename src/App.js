@@ -11,11 +11,13 @@ function App() {
   const [resultsV, setResultsV] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const [placeHome, setplaceHome] = useState(true);
+  const [orderRes, setOrderRes] = useState('relevance');
+  const [resType, setResType] = useState('all');
 
-  const getBooks = useCallback(bookSearch => {
+  const getBooks = useCallback((bookSearch, orderRes, resType) => {
     //const book = {bookSearch};
-    console.log(bookSearch);
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${bookSearch}&maxResults=6`)
+    console.log(bookSearch, orderRes, resType);
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=${bookSearch}&maxResults=6&orderBy=${orderRes}&printType=${resType}`)
         .then(res => res.json())
         .then((data) =>{
           console.log(data.items, 'api results');
@@ -29,7 +31,7 @@ function App() {
         .catch((err) => {
           console.log(err.message, 'error message');
         })
-  }, [bookSearch])
+  }, [orderRes, resType])
 
   const handleSubmit = (e) =>{
 
@@ -42,7 +44,7 @@ function App() {
     setIsPending(true);
 
     //call API
-    getBooks(bookSearch);
+    getBooks(bookSearch, orderRes, resType);
   }
 
   //Chakra UI things
@@ -104,7 +106,7 @@ function App() {
           />
         </Box>}
 
-      {resultsContainer && <ResultContainer results={resultsV} bookSearch={bookSearch} />}
+      {resultsContainer && <ResultContainer results={resultsV} bookSearch={bookSearch} setOrderRes={setOrderRes} setResType={setResType} handleSubmit={handleSubmit} orderRes={orderRes} resType={resType} />}
 
       <Box as='footer' display='flex' alignItems='center' flexDirection='column' justifyContent='center' py={5} background='orange.300' mt={5} bottom='0px'>
         <Heading as="h5" size='md'>Bookmarked</Heading>

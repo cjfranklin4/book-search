@@ -1,9 +1,24 @@
-import {Grid, GridItem, Text, Button,Heading, Image,Flex, Box } from '@chakra-ui/react'
+import {Grid, GridItem, Text, Button,Heading, Image,Flex, Box, Select } from '@chakra-ui/react'
 
-const ResultContainer = ({results, bookSearch}) => {
+const ResultContainer = ({results, bookSearch, setOrderRes, setResType, handleSubmit, orderRes, resType}) => {
+    const handleSearch = (e) =>{
+        setOrderRes(e.target.value)
+        handleSubmit(bookSearch, orderRes, resType)
+    }
+
    return (
     <Box>
         <Heading as="h2" textAlign='center' mb={2}>Results for: {bookSearch}</Heading>
+        <Select placeholder='Sort By' onChange={handleSearch}>
+            <option value="relevance">Relevance</option>
+            <option value="Newest">Newest Published</option>
+        </Select>
+        <Select placeholder='Document Type' onChange={e => setResType(e.target.value)}>
+            <option value="all">All</option>
+            <option value="book">Book</option>
+            <option value="newspaper">Newspaper</option>
+            <option value="magazine">Magazine</option>
+        </Select>
         <Grid
         templateColumns='repeat(2, 1fr)'
         gap={5}
