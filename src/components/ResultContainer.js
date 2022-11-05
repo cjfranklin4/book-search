@@ -27,8 +27,8 @@ const ResultContainer = ({results, bookSearch}) => {
                         <Box
                             w='30%'
                             h="100%"
-                            mr='10px'
                             height='100%'
+                            display={['none', 'block']}
                         >
                             <Image
                                 w='100%'
@@ -39,12 +39,13 @@ const ResultContainer = ({results, bookSearch}) => {
                         
 
                         <Box
-                            w='70%'
+                            w={['100%','70%']}
                             h='auto'
                             display='flex'
                             flexDirection='column'
                             alignContent='center'
                             justifyContent='center'
+                            ml='10px'
                             mr='10px'
                         >
                             <Heading as="h2" size="md" mt={2} mb={2}>{book.volumeInfo.title}</Heading>
