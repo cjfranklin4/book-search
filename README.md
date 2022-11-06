@@ -7,3 +7,4 @@ The initial goal of this project was to become more confortable with REST API's 
 The next steps for this project are:
 - Implement a __pagination__ feature to display more results
 - Implement a search resulsts __filter__
+- Add a __Saved Books__ functionality, that uses local storage to save books found using the search
